@@ -6,7 +6,7 @@ const cors = require('cors');
 const { hash, compare } = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const { verify } = require('jsonwebtoken');
-/// const { isEmail } = require('validator');
+const { isEmail } = require('validator');
 const { sendAccessToken, sendRefreshToken, createAccessToken, createRefreshToken } = require('./tokens.js')
 const { isAuth } = require('./isAuth.js');
 
