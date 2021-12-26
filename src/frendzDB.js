@@ -1,6 +1,5 @@
 
 const mongoose = require('mongoose');
-const {compare}
 
 mongoose.connect('mongodb://localhost:27017/frendzDB');
 
@@ -12,7 +11,7 @@ const userSchema = new mongoose.Schema({
     contacts: Array
 });
 
-const Users = new mongoose.Users('Users', userSchema);
+const Users = new mongoose.model('Users', userSchema);
 
 module.exports = {
     Users
