@@ -30,7 +30,13 @@ server.post('/register', async (req, res) => {
         if (isUser) throw new Error('This username already exists!');
 
         const hashedPassword = await hash(password, 10);
-        saveNewUser(username, email, hashedPassword);
+        const newUser = new Users({
+            username,
+            email,
+            password: hashedPassword
+        })
+
+        newUser.save();
         
         res.send('User Created!');
     } catch (err) {
