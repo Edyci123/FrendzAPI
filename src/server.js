@@ -9,6 +9,7 @@ const { verify } = require('jsonwebtoken');
 const { isEmail } = require('validator');
 const { sendAccessToken, sendRefreshToken, createAccessToken, createRefreshToken } = require('./tokens.js')
 const { isAuth } = require('./isAuth.js');
+const { Users } = require('./frendzDB.js')
 
 const server = express();
 
@@ -20,18 +21,6 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(express.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/frendzDB');
-
-const UserSchema = mongoose.Schema({
-    username: String, 
-    email: String,
-    password: String,
-    refreshtoken: String,
-    contacts: Array
-});
-
-const Users = new mongoose.model('users', UserSchema);
-
 server.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -41,14 +30,8 @@ server.post('/register', async (req, res) => {
         if (isUser) throw new Error('This username already exists!');
 
         const hashedPassword = await hash(password, 10);
-
-        let newUser = new Users({
-            username: username, 
-            email: email, 
-            password: hashedPassword
-        });
-
-        newUser.save();
+        saveNewUser(username, email, hashedPassword);
+        
         res.send('User Created!');
     } catch (err) {
         res.send({
