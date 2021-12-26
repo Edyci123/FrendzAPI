@@ -27,7 +27,7 @@ const UserSchema = mongoose.Schema({
     email: String,
     password: String,
     refreshtoken: String,
-    contacts: String 
+    contacts: Array
 });
 
 const Users = new mongoose.model('users', UserSchema);
