@@ -55,8 +55,11 @@ server.post('/login', (req, res) => {
     
         if (!isUser) throw new Error('User not found!');
 
-        Users.findOne({username: username}, (err, user) => {
-            const isValid = compare(password, user.password);
+        Users.findOne({username: username}, async (err, user) => {
+            const isValid = await compare(password, user.password);
+            
+            console.log(isValid);
+
             if (!isValid) throw new Error('Wrong Password!');
 
             const accesstoken = createAccessToken(user._id);
