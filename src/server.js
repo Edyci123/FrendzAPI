@@ -47,29 +47,28 @@ server.post('/register', async (req, res) => {
 
 });
 
-server.post('/login', (req, res) => {
+server.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const isUser = Users.exists({username: username});
+        const isUser = await Users.exists({username: username});
+
+        let eroare = null;
     
-        if (!isUser) throw new Error('User not found!');
+        if (isUser === false) throw new Error('User not found!');
 
         Users.findOne({username: username}, async (err, user) => {
             const isValid = await compare(password, user.password);
-            
-            console.log(isValid);
 
-            if (!isValid) throw new Error('Wrong Password!');
+            if (!isValid) return res.send({error: 'Wrong Password'})
 
             const accesstoken = createAccessToken(user._id);
             const refreshtoken = createRefreshToken(user._id);
 
             Users.updateOne({username: username}, {refreshtoken: refreshtoken}, (err) => {
-                if (err)
-                    throw new Error(err.message);
+                if (err) return res.send({error: `${err.message}`});
             });
-            
+
             sendRefreshToken(res, refreshtoken);
             sendAccessToken(req, res, accesstoken);
         });
