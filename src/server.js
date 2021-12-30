@@ -88,6 +88,8 @@ server.post('/getContacts', async (req, res) => {
             res.send({ 
                 message: 'Contacts sent'
             });
+        } else {
+            throw new Error('Something went wrong!');
         }
     } catch (err) {
         res.send({
@@ -133,6 +135,29 @@ server.post('/refresh_token', (req, res) => {
     });
 
 });
+
+server.post('/addContacts', (req, res) => {
+
+    try {
+        const userID = isAuth(req);
+        
+        if (userID !== null) {
+            const { newContact } = req.body;
+            Users.updateOne({_id: userID}, {$push: {contacts: newContact}}, (err) => {
+                if (err) console.log(err);
+            });
+            res.send('User added to your contacts');
+        } else {
+            throw new Error('Something went wrong!');
+        }
+    } catch (err) {
+        res.send({
+            error: `${err.message}`
+        });
+    }
+
+
+})
 
 
 server.listen(process.env.PORT);
