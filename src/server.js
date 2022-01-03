@@ -34,7 +34,7 @@ server.post('/register', async (req, res) => {
             username,
             email,
             password: hashedPassword
-        })
+        });
 
         newUser.save();
         
@@ -142,11 +142,12 @@ server.post('/addContacts', (req, res) => {
         const userID = isAuth(req);
         
         if (userID !== null) {
-            const { newContact } = req.body;
+            const newContact = req.body;
+            console.log(newContact)
             Users.updateOne({_id: userID}, {$push: {contacts: newContact}}, (err) => {
                 if (err) console.log(err);
             });
-            res.send('User added to your contacts');
+            return res.send('User added to your contacts');
         } else {
             throw new Error('Something went wrong!');
         }
@@ -155,8 +156,6 @@ server.post('/addContacts', (req, res) => {
             error: `${err.message}`
         });
     }
-
-
 })
 
 

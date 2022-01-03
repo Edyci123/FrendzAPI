@@ -1,4 +1,4 @@
-const { verify, sign } = require('jsonwebtoken')
+const { sign } = require('jsonwebtoken')
 
 const createAccessToken = userID => {
     return sign({userID}, process.env.ACCESS_TOKEN_SECRET, {
