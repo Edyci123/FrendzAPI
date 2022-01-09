@@ -156,7 +156,11 @@ server.post('/addContacts', (req, res) => {
             error: `${err.message}`
         });
     }
+<<<<<<< HEAD
 })
+=======
+});
+>>>>>>> 90823e60c9287c535078d26589b9f2ac94a7f58e
 
 
 server.listen(process.env.PORT);
