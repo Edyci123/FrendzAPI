@@ -156,7 +156,7 @@ server.post('/addContacts', (req, res) => {
             error: `${err.message}`
         });
     }
+})
 
 server.listen(process.env.PORT);
-
 
