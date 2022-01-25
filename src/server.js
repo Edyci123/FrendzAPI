@@ -85,9 +85,11 @@ server.post('/getContacts', async (req, res) => {
         const userID = isAuth(req);
         
         if (userID !== null) {
-            res.send({ 
-                message: 'Contacts sent'
-            });
+            Users.findOne({_id: userID}, (err, user) => {
+                res.send({ 
+                    contacts: user.contacts
+                });
+            })
         } else {
             throw new Error('Something went wrong!');
         }
@@ -137,13 +139,11 @@ server.post('/refresh_token', (req, res) => {
 });
 
 server.post('/addContacts', (req, res) => {
-
     try {
         const userID = isAuth(req);
         
         if (userID !== null) {
             const newContact = req.body;
-            console.log(newContact)
             Users.updateOne({_id: userID}, {$push: {contacts: newContact}}, (err) => {
                 if (err) console.log(err);
             });
